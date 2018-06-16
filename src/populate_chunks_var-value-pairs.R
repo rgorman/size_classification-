@@ -54,7 +54,7 @@ for(i in seq_along(files.v)) {
   
   
   tib_part <- working.tib %>%
-    part_tibs(2000)
+    part_tibs(50)
   
   folds <- length(tib_part)
   
@@ -267,5 +267,6 @@ for (i in seq_len(nlevels(final.tib$authors))) {
 
 final.tib <-  add_column(final.tib, probs = combined_chunk_props, .before = TRUE)
 
-
+total_end_time <- Sys.time()
+print(total_end_time - total_start_time)
 

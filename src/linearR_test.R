@@ -28,7 +28,7 @@ total_start_time <- Sys.time()
 for (i in 1:100) {
   start_time <- Sys.time()
   #create vector of random integers = 10% of obs in smaller.df
-  testing.index.v <- sample (seq (1, nrow(target.tib)), 30, prob=target.tib$probs)
+  testing.index.v <- sample (seq (1, nrow(target.tib)), 1166, prob=target.tib$probs)
   
   
   
@@ -71,9 +71,9 @@ for (i in 1:100) {
   print(end_time_2 - start_time_2)
   
   
-  store_iterations_tib <- bind_rows(store_iterations_tib, store_iterations_tib)
+  # store_iterations_tib <- bind_rows(store_iterations_tib, store_iterations_tib)
   
-  saveRDS(store_iterations_tib, file = "./size_and_classif/2018-6-11_omnibus_result_itbble.RDS")
+  # saveRDS(store_iterations_tib, file = "./size_and_classif/2018-6-11_omnibus_result_itbble.RDS")
   
   
   end_tme <- Sys.time()
@@ -90,6 +90,16 @@ print(Sys.time())
 print(total_end_time - total_start_time)
 
 
+
+collected_errors <- sapply(type2.error.matrix.l, get_total_errors)
+
+
+
+
+sum(collected_errors)
+
+
+##########################
 
 
 
@@ -120,7 +130,18 @@ sum(collected_errors)
 (3000 - sum(collected_errors) ) / 3000
 
 
+collected_errors %>%
+  max()
 
+collected_errors %>%
+  min()
+
+which(collected_errors == 137) %>% 
+  length()
+
+
+
+falsity.l
 
 store_iterations_tib <-  tibble(guesses = guesses.l, truth = truth.l, wrong_answers = falsity.l, chunks_tested = test_chunks.l)
 ###
@@ -133,6 +154,11 @@ type2.error.matrix.l[[5]]
 
 
 
+ meta_data.tib[, 3] %>%
+  unlist() %>%
+  mean()
+
+meta_data.tib
 
 type2.results.l <- vector(mode = "list", 100)
 type2.error.matrix.l <- vector(mode = "list", 100)
@@ -141,22 +167,39 @@ test_chunks.l <- vector(mode = "list", 100)
 guesses.l <- vector(mode = "list", 100)
 falsity.l <- vector(mode = "list", 100)
 
+guesses.l[[9]][13]
+test_chunks.l[[9]][13]
+
 
 try_it.tib$guesses[[100]]
 
+sapply()
+
 falsity.l
 
-guesses.l[[36]]
-truth.l[[36]]
+guesses.l[[100]][131]
+test_chunks.l[[100]][131]
 
 test_chunks.l[[91]]
 
 which( !(guesses.l[[91]] == truth.l[[91]]) )
 
+test_chunks.l %>%
+  map(., is_in, "Sophocles_Antigone_chunk_4" ) %>%
+  is_in(TRUE)
+
+sapply(test_chunks.l, is_in, "Sophocles_Antigone_chunk_2") %>%
+  which(. == TRUE)
+
+
+
 which(collected_errors > 0)
 
 which(falsity.l > 0)
-which( !(guesses.l[[36]] == truth.l[[36]]) )
+
+which( !(guesses.l == truth.l) )
+
+which( !(guesses.l[[i]] == truth.l[[i]]) )
 
 
 guesses.l[[36]]
@@ -203,101 +246,5 @@ confusionMatrix(type2.results.l[[2]]$predictions, answers.l[[2]])
 
 ######################
 
-2802 - 346
-
-6019 - (346 + 41)
-
-2456 / 5632
-
-aggie <- as_tibble(1:414)
-
-x <- as_tibble(type7.results.l[[10]])
-
-aggie <- bind_cols(aggie, x)
-
-aggie <- aggie[, 2:ncol(aggie)]
-
-aggie
-
-for(i in 1:nrow(aggie)) {
-  
-  votes <- aggie[i,] %>%
-    unlist() %>%
-    as.factor()
-  
-  y <- summary(votes)
-  
-  
-  if (i == 1) {
-    
-    scores.df <- data_frame_(y)
-    
-  } else {
-    
-    y.df <- data_frame_(y)
-    scores.df <- bind_rows(scores.df, y.df)
-    
-  }
-  
-}
 
 
-rights <- testing.classes %>%
-  as.character()
-
-scores_2.df <- cbind(rights, scores.df)
-
-
-
-for (i in seq_len(nrow(scores_2.df))) {
-  
-  elected_col <- which(scores_2.df[i, 2:10] == max(scores_2.df[i, 2:10])) 
-  
-  
-  elected_name <- colnames(scores_2.df[elected_col + 1])
-  
-  if (i == 1) {
-    
-    counter <- elected_name == rights[i]
-    
-  }else {
-    
-    if (i <= 413) {
-      
-      counter <- append(counter, elected_name == rights[i])
-      
-    }
-    
-    
-    
-  }
-  
-  
-  
-  
-}
-
-x <- type2.results.l[[5]] %>%
-  unlist() %>%
-  as.factor()
-
-confusionMatrix(type2.results.l[[5]]$predictions, testing.classes)
-
-
-type2.error.matrix.l[[5]]
-
-errormatrix(testing.classes, type2.results.l[[5]]$predictions)
-
-
-which(type2.results.l[[5]]$predictions == "Aeschines")
-
-which(testing.classes == "Aeschines")
-
-x[1] == "Polybius"
-which(x == "Polybius")
-
-result
-
-errormatrix(testing.classes, result$predictions)
-
-target.tib[209:230, 1:3]
